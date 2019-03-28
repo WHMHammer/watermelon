@@ -1,8 +1,10 @@
 # The Watermeton Project
 
+We are currently at phase 1. Please see `prototype-master` branch.
+
 ## Project Description
 
-This project is originally derived from [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager). I used to be the back-end software engineer of [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager). However, there came to disagreements between me and other team members on multiple security and technical issues. As a result, I resigned from [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager) team and built up my own team, and extended the functionality of the project.
+This project is originally derived from [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager). I used to be the back-end software engineer of [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager). However, there came to disagreements between me and other team members on multiple security and technical issues. As a result, I resigned from [the Cantaloupe project](https://github.com/DevPSU/Attendance-Manager) team, built up my own, and extended the functionality of the project.
 
 The final goal of the Watermelon Project is to enable users to register for accounts, and set up and subsribe from "events" following the structure presented below:
 
