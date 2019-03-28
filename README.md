@@ -1,4 +1,4 @@
-# The Watermeton Project
+# The Watermelon Project
 
 We are currently at phase 1. Please see `prototype-master` branch.
 
