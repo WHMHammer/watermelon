@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43774446225BD622001108B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43774445225BD622001108B3 /* AppDelegate.swift */; };
 		43774449225BD622001108B3 /* Suika.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43774447225BD622001108B3 /* Suika.xcdatamodeld */; };
 		4377444B225BD622001108B3 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377444A225BD622001108B3 /* MasterViewController.swift */; };
 		4377444D225BD622001108B3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377444C225BD622001108B3 /* DetailViewController.swift */; };
