@@ -1,0 +1,605 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		43774449225BD622001108B3 /* Suika.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43774447225BD622001108B3 /* Suika.xcdatamodeld */; };
+		4377444B225BD622001108B3 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377444A225BD622001108B3 /* MasterViewController.swift */; };
+		4377444D225BD622001108B3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377444C225BD622001108B3 /* DetailViewController.swift */; };
+		43774450225BD622001108B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4377444E225BD622001108B3 /* Main.storyboard */; };
+		43774452225BD623001108B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43774451225BD623001108B3 /* Assets.xcassets */; };
+		43774455225BD623001108B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43774453225BD623001108B3 /* LaunchScreen.storyboard */; };
+		43774460225BD623001108B3 /* SuikaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377445F225BD623001108B3 /* SuikaTests.swift */; };
+		4377446B225BD623001108B3 /* SuikaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4377446A225BD623001108B3 /* SuikaUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4377445C225BD623001108B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4377443A225BD622001108B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43774441225BD622001108B3;
+			remoteInfo = Suika;
+		};
+		43774467225BD623001108B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4377443A225BD622001108B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43774441225BD622001108B3;
+			remoteInfo = Suika;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		43774442225BD622001108B3 /* Suika.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Suika.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		43774445225BD622001108B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		43774448225BD622001108B3 /* Suika.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Suika.xcdatamodel; sourceTree = "<group>"; };
+		4377444A225BD622001108B3 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		4377444C225BD622001108B3 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		4377444F225BD622001108B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		43774451225BD623001108B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43774454225BD623001108B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		43774456225BD623001108B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4377445B225BD623001108B3 /* SuikaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuikaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4377445F225BD623001108B3 /* SuikaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuikaTests.swift; sourceTree = "<group>"; };
+		43774461225BD623001108B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43774466225BD623001108B3 /* SuikaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuikaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4377446A225BD623001108B3 /* SuikaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuikaUITests.swift; sourceTree = "<group>"; };
+		4377446C225BD623001108B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4377443F225BD622001108B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774458225BD623001108B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774463225BD623001108B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		43774439225BD622001108B3 = {
+			isa = PBXGroup;
+			children = (
+				43774444225BD622001108B3 /* Suika */,
+				4377445E225BD623001108B3 /* SuikaTests */,
+				43774469225BD623001108B3 /* SuikaUITests */,
+				43774443225BD622001108B3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		43774443225BD622001108B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				43774442225BD622001108B3 /* Suika.app */,
+				4377445B225BD623001108B3 /* SuikaTests.xctest */,
+				43774466225BD623001108B3 /* SuikaUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		43774444225BD622001108B3 /* Suika */ = {
+			isa = PBXGroup;
+			children = (
+				43774445225BD622001108B3 /* AppDelegate.swift */,
+				4377444A225BD622001108B3 /* MasterViewController.swift */,
+				4377444C225BD622001108B3 /* DetailViewController.swift */,
+				4377444E225BD622001108B3 /* Main.storyboard */,
+				43774451225BD623001108B3 /* Assets.xcassets */,
+				43774453225BD623001108B3 /* LaunchScreen.storyboard */,
+				43774456225BD623001108B3 /* Info.plist */,
+				43774447225BD622001108B3 /* Suika.xcdatamodeld */,
+			);
+			path = Suika;
+			sourceTree = "<group>";
+		};
+		4377445E225BD623001108B3 /* SuikaTests */ = {
+			isa = PBXGroup;
+			children = (
+				4377445F225BD623001108B3 /* SuikaTests.swift */,
+				43774461225BD623001108B3 /* Info.plist */,
+			);
+			path = SuikaTests;
+			sourceTree = "<group>";
+		};
+		43774469225BD623001108B3 /* SuikaUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4377446A225BD623001108B3 /* SuikaUITests.swift */,
+				4377446C225BD623001108B3 /* Info.plist */,
+			);
+			path = SuikaUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		43774441225BD622001108B3 /* Suika */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4377446F225BD623001108B3 /* Build configuration list for PBXNativeTarget "Suika" */;
+			buildPhases = (
+				4377443E225BD622001108B3 /* Sources */,
+				4377443F225BD622001108B3 /* Frameworks */,
+				43774440225BD622001108B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Suika;
+			productName = Suika;
+			productReference = 43774442225BD622001108B3 /* Suika.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4377445A225BD623001108B3 /* SuikaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43774472225BD623001108B3 /* Build configuration list for PBXNativeTarget "SuikaTests" */;
+			buildPhases = (
+				43774457225BD623001108B3 /* Sources */,
+				43774458225BD623001108B3 /* Frameworks */,
+				43774459225BD623001108B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4377445D225BD623001108B3 /* PBXTargetDependency */,
+			);
+			name = SuikaTests;
+			productName = SuikaTests;
+			productReference = 4377445B225BD623001108B3 /* SuikaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		43774465225BD623001108B3 /* SuikaUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43774475225BD623001108B3 /* Build configuration list for PBXNativeTarget "SuikaUITests" */;
+			buildPhases = (
+				43774462225BD623001108B3 /* Sources */,
+				43774463225BD623001108B3 /* Frameworks */,
+				43774464225BD623001108B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43774468225BD623001108B3 /* PBXTargetDependency */,
+			);
+			name = SuikaUITests;
+			productName = SuikaUITests;
+			productReference = 43774466225BD623001108B3 /* SuikaUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4377443A225BD622001108B3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = LDK;
+				TargetAttributes = {
+					43774441225BD622001108B3 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					4377445A225BD623001108B3 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 43774441225BD622001108B3;
+					};
+					43774465225BD623001108B3 = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 43774441225BD622001108B3;
+					};
+				};
+			};
+			buildConfigurationList = 4377443D225BD622001108B3 /* Build configuration list for PBXProject "Suika" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 43774439225BD622001108B3;
+			productRefGroup = 43774443225BD622001108B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				43774441225BD622001108B3 /* Suika */,
+				4377445A225BD623001108B3 /* SuikaTests */,
+				43774465225BD623001108B3 /* SuikaUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43774440225BD622001108B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43774455225BD623001108B3 /* LaunchScreen.storyboard in Resources */,
+				43774452225BD623001108B3 /* Assets.xcassets in Resources */,
+				43774450225BD622001108B3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774459225BD623001108B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774464225BD623001108B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4377443E225BD622001108B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43774446225BD622001108B3 /* AppDelegate.swift in Sources */,
+				43774449225BD622001108B3 /* Suika.xcdatamodeld in Sources */,
+				4377444B225BD622001108B3 /* MasterViewController.swift in Sources */,
+				4377444D225BD622001108B3 /* DetailViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774457225BD623001108B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43774460225BD623001108B3 /* SuikaTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43774462225BD623001108B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4377446B225BD623001108B3 /* SuikaUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4377445D225BD623001108B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43774441225BD622001108B3 /* Suika */;
+			targetProxy = 4377445C225BD623001108B3 /* PBXContainerItemProxy */;
+		};
+		43774468225BD623001108B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43774441225BD622001108B3 /* Suika */;
+			targetProxy = 43774467225BD623001108B3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4377444E225BD622001108B3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4377444F225BD622001108B3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		43774453225BD623001108B3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43774454225BD623001108B3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4377446D225BD623001108B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4377446E225BD623001108B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		43774470225BD623001108B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Suika/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.Suika;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		43774471225BD623001108B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Suika/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.Suika;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		43774473225BD623001108B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SuikaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.SuikaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Suika.app/Suika";
+			};
+			name = Debug;
+		};
+		43774474225BD623001108B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SuikaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.SuikaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Suika.app/Suika";
+			};
+			name = Release;
+		};
+		43774476225BD623001108B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SuikaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.SuikaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Suika;
+			};
+			name = Debug;
+		};
+		43774477225BD623001108B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SuikaUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ldk.SuikaUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Suika;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4377443D225BD622001108B3 /* Build configuration list for PBXProject "Suika" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4377446D225BD623001108B3 /* Debug */,
+				4377446E225BD623001108B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4377446F225BD623001108B3 /* Build configuration list for PBXNativeTarget "Suika" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43774470225BD623001108B3 /* Debug */,
+				43774471225BD623001108B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43774472225BD623001108B3 /* Build configuration list for PBXNativeTarget "SuikaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43774473225BD623001108B3 /* Debug */,
+				43774474225BD623001108B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43774475225BD623001108B3 /* Build configuration list for PBXNativeTarget "SuikaUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43774476225BD623001108B3 /* Debug */,
+				43774477225BD623001108B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		43774447225BD622001108B3 /* Suika.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				43774448225BD622001108B3 /* Suika.xcdatamodel */,
+			);
+			currentVersion = 43774448225BD622001108B3 /* Suika.xcdatamodel */;
+			path = Suika.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 4377443A225BD622001108B3 /* Project object */;
+}
