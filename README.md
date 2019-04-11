@@ -5,5 +5,3 @@ This project is founded by [WHMHammer](https://github.com/WHMHammer), and co-fou
 For project tracking and roadmap, click [here](https://github.com/WHMHammer/watermelon/projects/2).
 
 [Authentication system](https://github.com/WHMHammer/auth)
-
-[iOS client](https://github.com/WHMHammer/watermelon/tree/IOS-set-up)
