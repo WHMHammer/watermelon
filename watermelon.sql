@@ -26,17 +26,19 @@ create table watermelon.events(
     -- begin datetime,
     end_time datetime,
     weekly_0_begin datetime,
-    weekly_0_end datetime,
+    -- weekly_0_end datetime,
     weekly_1_begin datetime,
-    weekly_1_end datetime,
+    -- weekly_1_end datetime,
     weekly_2_begin datetime,
-    weekly_2_end datetime,
+    -- weekly_2_end datetime,
     weekly_3_begin datetime,
-    weekly_3_end datetime,
+    -- weekly_3_end datetime,
     weekly_4_begin datetime,
-    weekly_4_end datetime,
+    -- weekly_4_end datetime,
     monthly_0_begin datetime,
-    monthly_0_end datetime
+    -- monthly_0_end datetime,
+    weekly_window int(3),
+    monthly_window int(3)
 );
 
 creat table watermelon.subscriptions(

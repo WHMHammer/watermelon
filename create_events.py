@@ -1,56 +1,62 @@
 from flask import Flask, request
+import time
+import datetime
 import sqlite3
 
 app=Flask(__name__)
 
 @app.route("/create_event",methods=["POST"])
 def create_event():
+
+    form=flask.request.get_json()
+
     #check input validation
     try:
-        if request.method != "POST":
-            e_message="405, Methods not Allowed"
-            return e_message
-        #check events amount
-        elif len(request.form["weekly"]) > 5:
-            e_message="400, Bad Request"
-            return e_message
-        elif len(request.form["monthly"]) > 1:
-            e_message="400, Bad Request"
-            return e_message
-
-        #insert to data table
-        else:
-            insert_to_table(request.form)
-            return "event recorded"
-
-    except KeyError:
-            e_message="400, Bad Request"
-            return e_message
-
-    def insert_to_table(form):
         event_name = form["name"]
         description = form["description"]
         end_time = form["end_time"]
-        weekly = form["weekly"]
+        window=form["window"]
+        weekly=[]
 
-        conn = sqlite3.connect("watermelon.db")
-        c = conn.cursor()
-
-        c.execute(
-            "INSERT INTO events (name, description, end_time) VALUES (?,?,?)",
-            (event_name,description,end_time,)
-            )
-        for i in range(len(weekly)):
-            c.execute(
-                "INSERT INTO events (weekly_?_begin, weekly_?_end) VALUES (weekly[?])",(i,i,i)
-                )
+        for i in form["weekly"]:
+            weekly.append(datetime.fromtimestamp(i))
+            waiting=i-time.time()
+            if waiting>60*60*24*100:
+                return "{}",400,{"Content-Type":"application/json"}
         try:
-            monthly = form["monthly"]
+        monthly= datetime.fromtimestamp(form["monthly"])
+        if form["monthly"]-time.time()>60*60*24*100:
+            return "{}",400,{"Content-Type":"application/json"}
         except KeyError:
-            monthly = ["",""]
+            monthly=[None]
+
+        elif len(weekly)>5 or len(monthly)>1 or len(str(window))>3:
+            return "{}",400,{"Content-Type":"application/json"}
+
+    except KeyError:
+        return "{}",400,{"Content-Type":"application/json"}
+    except ValueError:
+        return "{}",400,{"Content-Type":"application/json"}
+
+    #insert to data table
+    conn = sqlite3.connect("watermelon.db")
+    c = conn.cursor()
+
+    c.execute(
+        "INSERT INTO events (name, description, end_time, window) VALUES (?,?,?,?)",
+        (event_name,description,end_time,window,)
+        )
+    c.execute(
+        "INSERT INTO events (monthly_0_begin) VALUES (?)",
+        monthly
+        )
+
+    for i in range(len(weekly)):
         c.execute(
-            "INSERT INTO events (monthly_0_begin,monthly_0_end) VALUES (?)",(monthly)
+            "INSERT INTO events (weekly_?_begin) VALUES (?)",
+            (i,weekly[i])
             )
 
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
+    return "event recorded"
