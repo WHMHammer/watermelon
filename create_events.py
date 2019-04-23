@@ -59,4 +59,4 @@ def create_event():
 
     conn.commit()
     conn.close()
-    return "event recorded"
+    return {"event created"},,{"Content-Type":"application/json"}
