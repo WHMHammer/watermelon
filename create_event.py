@@ -2,7 +2,7 @@ import flask
 from time import time
 import sqlite3
 
-app=Flask(__name__)
+app=flask.Flask(__name__)
 
 @app.route("/create_event",methods=("GET","POST"))
 def create_event():
