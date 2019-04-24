@@ -43,7 +43,7 @@ def create_event():
         )
 
     c.execute(
-        "SELECT seq FROM sqlite_sequence WHERE name="events""
+        "SELECT seq FROM sqlite_sequence WHERE name='events';"
         ))
     event_id=c.fetchone()[0]
     
