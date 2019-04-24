@@ -42,9 +42,10 @@ def create_event():
         (title,description,end_time,w_window,m_window)
         )
 
-    event_id= int(c.execute(
+    c.execute(
         "SELECT seq FROM sqlite_sequence WHERE name="events""
         ))
+    event_id=c.fetchone()[0]
     
     for i in range(5):
         try:
@@ -73,8 +74,6 @@ def create_event():
     conn.commit()
     conn.close()
     return "{}",{"Content-Type":"application/json"}
-    # 等效于 return "{}",200,{"Content-Type":"application/json"}
-    # 200 status code已能说明成功存储
 
 def check_title(title):
     return len(title)<33
