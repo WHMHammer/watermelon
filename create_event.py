@@ -32,7 +32,7 @@ def create_event():
         check_window(w_window) and
         check_window(m_window)
     ):
-        return "{}",401,{"Content-Type":"application/json"}
+        return "{}",400,{"Content-Type":"application/json"}
     
     conn = sqlite3.connect("watermelon.db")
     c = conn.cursor()
@@ -54,7 +54,7 @@ def create_event():
                 c.execute("update events set weekly%d=datetime(?,'unixepoch') where id=?;"%(i),(weekly[i],event_id))
             else:
                 conn.close()
-                return "{}",402,{"Content-Type":"application/json"}
+                return "{}",400,{"Content-Type":"application/json"}
         except IndexError:
             break
     
@@ -65,7 +65,7 @@ def create_event():
                 c.execute("update events set monthly%d=datetime(?,'unixepoch') where id=?;"%(i),(monthly[i],event_id))
             else:
                 conn.close()
-                return "{}",403,{"Content-Type":"application/json"}
+                return "{}",400,{"Content-Type":"application/json"}
         except IndexError:
             break
     
