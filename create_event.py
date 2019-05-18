@@ -30,7 +30,8 @@ def create_event():
         check_description(description) and
         check_end_time(end_time) and
         check_window(w_window) and
-        check_window(m_window)
+        check_window(m_window) and
+        check_overlaps(weekly)
     ):
         return "{}",400,{"Content-Type":"application/json"}
     
@@ -93,3 +94,11 @@ def check_window(window):
 def check_schedule(schedule,window,end_time):
     cur_time=int(time())
     return schedule>cur_time and schedule+window<end_time
+
+def check_overlaps(weekly):
+    no_overlap = true
+    for i in range (len(weekly)-1):
+        for j in range (len(weekly)-1-i):
+            if (weekly[-1-j]-weekly[i])%604800‬ = 0:
+                no_overlap = False
+    return no_overlap
