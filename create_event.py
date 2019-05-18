@@ -96,7 +96,7 @@ def check_schedule(schedule,window,end_time):
     return schedule>cur_time and schedule+window<end_time
 
 def check_overlaps(weekly):
-    no_overlap = true
+    no_overlap = True
     for i in range (len(weekly)-1):
         for j in range (len(weekly)-1-i):
             if (weekly[-1-j]-weekly[i])%604800‬ = 0:
