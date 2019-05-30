@@ -1,0 +1,60 @@
+body{
+    margin: 30px;
+}
+
+.my-container{
+    border: 1px solid black;
+}
+
+.my-col{
+    padding: 0px;
+    border: 1px solid black;
+}
+
+.firstCol{
+    height:55px;
+    border-left:none;
+    border-right:none;
+    border-top:none;
+}
+
+.secondCol{
+    height:55px;
+    border-left:none;
+    border-right:none;
+    border-top:none;
+}
+
+.forthCol{
+    border-left:none;
+    border-right:none;
+    border-top:none;
+}
+
+.list{
+    height:fit-content;
+}
+
+.DD{
+    text-align: center;
+}
+
+.mainWindow{
+    width:300px;
+    height:300px;
+    padding:30px;
+    text-align:center;
+}
+label{
+    margin:5px;
+}
+.AskingRoot{
+    display:block;
+    margin-left:-40%;
+}
+.button{
+    margin-left:-28%;
+}
+#idAndName{
+    display:none;
+}

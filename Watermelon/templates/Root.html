@@ -1,0 +1,26 @@
+{% extends "homepage.html" %}
+{% block content %}
+
+		<div class="jumbotron">
+                <div class="mainWindow">
+                        <textarea rows="0" cols="20" required placeholder="Event Name"></textarea>
+                        
+                        <span class="AskingRoot">Root?</span>
+                        
+                        
+                        <label><input name="answer" type="radio" value="1" onclick="showBox()"/>Yes</label>
+                        <label><input name="answer" type="radio" value="2" onclick="showBox()"/>No</label>
+            
+                        <div id="idAndName">
+                            <textarea rows="0" cols="20" placeholder="ID"></textarea>
+                            <textarea rows="0" cols="20" placeholder="Name"></textarea>
+                        </div>
+            
+                        <div class="button">
+                            <button>Next Step</button>
+                        </div>
+            
+                    </div>
+        </div>
+        
+{% endblock %}

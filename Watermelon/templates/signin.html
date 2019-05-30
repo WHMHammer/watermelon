@@ -1,0 +1,21 @@
+{% extends "homepage.html" %}
+{% block content %}
+
+<div class="jumbotron" style="text-align: center">
+    <h1>Welcome to sign in page!</h1>
+    <p>Please fill out the form</p>
+
+    <form>
+        <label for="first">First name: </label>
+        <input type="text" name="first">
+        <label for="last">Last name: </label>
+        <input type="text" name="last">
+        <br>
+        <label for="password">Password: </label>
+        <input type="password" name="password">
+        <br>
+        <input type="submit" value="Submit_Form">
+    </form>
+</div>
+
+{% endblock %}
