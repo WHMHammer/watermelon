@@ -1,0 +1,13 @@
+{% extends "homepage.html" %}
+
+{% block content %}
+
+    <div class="jumbotron" style="text-align: center">
+        <p>Welcome to watermelon!</p>
+        <p>Wanna sign up for a new account?</p>
+        <a href="{{url_for('signup_form')}}">Sign up</a>
+        <br>
+        <a href="{{url_for('signin_form')}}">Sign in</a>
+    </div>
+
+{% endblock %}
