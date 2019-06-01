@@ -26,14 +26,16 @@ def create_event():
         return "{}",400,{"Content-Type":"application/json"}
     
     if not(
+        check_events_amount(weekly,monthly) and
         check_title(title) and
         check_description(description) and
         check_end_time(end_time) and
         check_window(w_window) and
-        check_window(m_window) and
-        check_overlaps(weekly)
+        check_window(m_window)
     ):
         return "{}",400,{"Content-Type":"application/json"}
+
+    weekly=remove_overlaps(weekly,w_window)
     
     conn = sqlite3.connect("watermelon.db")
     c = conn.cursor()
@@ -95,10 +97,15 @@ def check_schedule(schedule,window,end_time):
     cur_time=int(time())
     return schedule>cur_time and schedule+window<end_time
 
-def check_overlaps(weekly):
-    no_overlap = True
-    for i in range (len(weekly)-1):
-        for j in range (len(weekly)-1-i):
-            if (weekly[-1-j]-weekly[i])%604800‬ = 0:
-                no_overlap = False
-    return no_overlap
+def check_events_amount(weekly,monthly):
+    return len(weekly)<=5 and len(monthly)<=1
+
+def remove_overlaps(weekly,w_window):
+    check=[]
+    for i in range (len(weekly)):
+        remainder=(weekly[i]%604800)//(w_window*60)
+        if not (remainder in check):
+            check.append(remainder)
+        else:
+            del weekly[i]
+    return weekly
