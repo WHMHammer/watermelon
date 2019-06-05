@@ -7,7 +7,7 @@ developer_email = "whmhammer@gmail.com"
 db_user = ""
 db_password = ""
 db_host = ""
-db_name = ""
+db_name = "watermelon"
 
 # email
 noreply = {

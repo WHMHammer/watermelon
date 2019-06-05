@@ -1,6 +1,7 @@
 import flask
 from simplejson import dumps
 from time import time
+from urllib.parse import unquote
 
 from lib import *
 from lib.auth import *
@@ -8,19 +9,20 @@ from lib.auth import *
 bp = flask.Blueprint("auth", __name__, url_prefix="/auth")
 
 
+@bp.before_request
+def cors():
+    if flask.request.method == "OPTIONS":
+        return "{}", {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, DELETE",
+            "Access-Control-Allow-Headers": "Content-Type"
+        }
+
+
 @bp.after_request
 def header(rp):
     rp.headers.set("Content-Type", "application/json")
     return rp
-
-
-@bp.route("/<path>", methods=("OPTIONS",))
-def cors(path):
-    return "{}", {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type"
-    }
 
 
 @bp.route("/register", methods=("POST",))
@@ -181,9 +183,8 @@ def verify():
 
 @bp.route("/login", methods=("GET",))
 def get_challenge():
-    form = flask.request.get_json()
     try:
-        username = str(form["username"])
+        username = unquote(str(flask.request.args["username"]))
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -295,9 +296,8 @@ def logout():
 
 @bp.route("/password", methods=("GET",))
 def request_reset_password():
-    form = flask.request.get_json()
     try:
-        email = str(form["email"]).lower()
+        email = unquote(str(flask.request.args["email"]))
     except (KeyError, TypeError):
         return "{}", 400
 
