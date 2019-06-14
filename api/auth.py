@@ -10,17 +10,16 @@ bp = flask.Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @bp.before_request
-def cors():
+def options():
     if flask.request.method == "OPTIONS":
-        return "{}", {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, DELETE",
-            "Access-Control-Allow-Headers": "Content-Type"
-        }
+        return "{}"
 
 
 @bp.after_request
 def header(rp):
+    rp.headers.set("Access-Control-Allow-Origin", "*")
+    rp.headers.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE")
+    rp.headers.set("Access-Control-Allow-Headers", "Content-Type")
     rp.headers.set("Content-Type", "application/json")
     return rp
 
@@ -89,7 +88,7 @@ def register():
     """, (username, email, salt, password_hash, challenge))
 
     try:
-        verify_url = "http://%s/auth/verify.html" % (domain)
+        verify_url = "https://%s/auth/verify" % (domain)
         send_email(
             noreply,
             email,
@@ -160,9 +159,6 @@ def verify():
         WHERE username = %s;
     """, ("verified", generate_salt(), username))
 
-    conn.commit()
-    conn.close()
-
     send_email(
         noreply,
         email,
@@ -175,6 +171,9 @@ def verify():
             <p>%s</p>
         """ % (username, project_name, project_name)
     )
+
+    conn.commit()
+    conn.close()
 
     return dumps({
         "user_token": generate_user_token(username)
@@ -335,7 +334,7 @@ def request_reset_password():
 
     conn.commit()
 
-    reset_password_url = "http://%s/auth/reset_password" % domain
+    reset_password_url = "https://%s/auth/reset_password" % domain
     send_email(
         noreply,
         email,
