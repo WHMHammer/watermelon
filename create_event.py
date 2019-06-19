@@ -101,11 +101,11 @@ def check_events_amount(weekly,monthly):
     return len(weekly)<=5 and len(monthly)<=1
 
 def remove_overlaps(weekly,w_window):
-    check=[]
+    check=set()
     for i in range (len(weekly)):
         remainder=(weekly[i]%604800)//(w_window*60)
         if not (remainder in check):
-            check.append(remainder)
+            check.add(remainder)
         else:
             del weekly[i]
     return weekly
