@@ -88,7 +88,7 @@ def register():
     """, (username, email, salt, password_hash, challenge))
 
     try:
-        verify_url = "https://%s/auth/verify" % (domain)
+        verify_url = "%s/auth/verify" % (domain)
         send_email(
             noreply,
             email,
@@ -334,7 +334,7 @@ def request_reset_password():
 
     conn.commit()
 
-    reset_password_url = "https://%s/auth/reset_password" % domain
+    reset_password_url = "%s/auth/reset_password" % domain
     send_email(
         noreply,
         email,
@@ -417,8 +417,48 @@ def reset_password():
 
 
 @bp.route("/user", methods=("GET",))
-def get_user_info():
-    return "{}", 501
+def get_username():
+    try:
+        email = unquote(str(flask.request.args["email"]))
+    except (KeyError, TypeError):
+        return "{}", 400
+
+    if not(
+        check_email(email)
+    ):
+        return "{}", 400
+
+    conn = connect_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT username
+        FROM users
+        WHERE email = %s AND status = %s
+        LIMIT 1;
+    """, (email, "verified"))
+
+    try:
+        username = cur.fetchone()[0]
+    except TypeError:
+        pass
+    else:
+        send_email(
+            noreply,
+            email,
+            "Your username at %s" % project_name,
+            """
+                <p>Your username at %s is:</p>
+                <p>%s</p>
+                <br/>
+                <p>Best regards,</p>
+                <p>%s</p>
+            """ % (project_name, username, project_name)
+        )
+
+    conn.close()
+
+    return "{}"
 
 
 @bp.route("/user", methods=("PUT",))
