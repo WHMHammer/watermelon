@@ -1,7 +1,6 @@
 # project
 project_name = "Watermelon"
 domain = ""
-developer_email = "whmhammer@gmail.com"
 
 # database
 db_user = ""

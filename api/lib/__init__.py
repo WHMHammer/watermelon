@@ -1,3 +1,4 @@
+import flask
 import mysql.connector as sql
 import smtplib
 from random import choice
@@ -6,8 +7,15 @@ from info import *
 
 
 # database
+def close_db():
+    db = flask.g.pop("db")
+    if db is not None:
+        db.close()
+
+
 def connect_db():
-    return sql.connect(
+    close_db()
+    flask.g.db = sql.connect(
         user=db_user,
         password=db_password,
         host=db_host,

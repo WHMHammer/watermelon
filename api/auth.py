@@ -1,4 +1,3 @@
-import flask
 from simplejson import dumps
 from time import time
 from urllib.parse import unquote
@@ -9,29 +8,13 @@ from lib.auth import *
 bp = flask.Blueprint("auth", __name__, url_prefix="/auth")
 
 
-@bp.before_request
-def options():
-    if flask.request.method == "OPTIONS":
-        return "{}"
-
-
-@bp.after_request
-def header(rp):
-    rp.headers.set("Access-Control-Allow-Origin", "*")
-    rp.headers.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE")
-    rp.headers.set("Access-Control-Allow-Headers", "Content-Type")
-    rp.headers.set("Content-Type", "application/json")
-    return rp
-
-
 @bp.route("/register", methods=("POST",))
 def register():
-    form = flask.request.get_json()
     try:
-        username = str(form["username"])
-        salt = str(form["salt"])
-        password_hash = str(form["password_hash"])
-        email = str(form["email"]).lower()
+        username = str(flask.g.form["username"])
+        salt = str(flask.g.form["salt"])
+        password_hash = str(flask.g.form["password_hash"])
+        email = str(flask.g.form["email"]).lower()
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -43,8 +26,7 @@ def register():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     err = False
     err_msg = list()
@@ -72,7 +54,6 @@ def register():
         err_msg.append("The username you entered has already been used.")
 
     if err:
-        conn.close()
         return dumps({"err_msg": err_msg}), 403
 
     challenge = generate_salt()
@@ -105,24 +86,21 @@ def register():
             """ % (username, challenge+salt, verify_url, verify_url, project_name)
         )
     except smtplib.SMTPRecipientsRefused:
-        conn.close()
         return dumps({
             "err_msg": ["The email address you entered is invalid."]}
         ), 403
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return "{}"
 
 
 @bp.route("/register", methods=("PUT",))
 def verify():
-    form = flask.request.get_json()
     try:
-        username = str(form["username"])
-        response = str(form["response"])
-        email = str(form["email"]).lower()
+        username = str(flask.g.form["username"])
+        response = str(flask.g.form["response"])
+        email = str(flask.g.form["email"]).lower()
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -133,8 +111,7 @@ def verify():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT password_hash, challenge
@@ -146,11 +123,9 @@ def verify():
     try:
         password_hash, challenge = cur.fetchone()
     except TypeError:
-        conn.close()
         return "{}", 403
 
     if response != hash(challenge, password_hash):
-        conn.close()
         return "{}", 403
 
     cur.execute("""
@@ -172,8 +147,7 @@ def verify():
         """ % (username, project_name, project_name)
     )
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return dumps({
         "user_token": generate_user_token(username)
@@ -192,8 +166,7 @@ def get_challenge():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT salt
@@ -205,7 +178,7 @@ def get_challenge():
     try:
         salt = cur.fetchone()[0]
     except TypeError:
-        conn.close()
+        
         return "{}", 404
 
     challenge = generate_salt()
@@ -216,8 +189,7 @@ def get_challenge():
         WHERE username = %s;
     """, (challenge, username))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return dumps({
         "salt": salt,
@@ -227,10 +199,9 @@ def get_challenge():
 
 @bp.route("/login", methods=("POST",))
 def login():
-    form = flask.request.get_json()
     try:
-        username = str(form["username"])
-        response = str(form["response"])
+        username = str(flask.g.form["username"])
+        response = str(flask.g.form["response"])
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -240,8 +211,7 @@ def login():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT password_hash, challenge
@@ -255,7 +225,6 @@ def login():
         return "{}", 403
 
     if response != hash(challenge, password_hash):
-        conn.close()
         return "{}", 403
 
     cur.execute("""
@@ -264,8 +233,7 @@ def login():
         WHERE username = %s;
     """, (generate_salt(), username))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return dumps({
         "user_token": generate_user_token(username)
@@ -274,27 +242,25 @@ def login():
 
 @bp.route("/login", methods=("DELETE",))
 def logout():
-    user = check_user_token()
+    user = get_user_token()
 
     if user is None:
         return "{}"
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         DELETE FROM sessions
         WHERE user_id = %s AND session = %s;
     """, (user["id"], flask.request.get_json().get("user_token")["session"]))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return "{}"
 
 
 @bp.route("/password", methods=("GET",))
-def request_reset_password():
+def request_password_reset():
     try:
         email = unquote(str(flask.request.args["email"]))
     except (KeyError, TypeError):
@@ -303,8 +269,7 @@ def request_reset_password():
     if not check_email(email):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT id, username
@@ -316,7 +281,6 @@ def request_reset_password():
     try:
         user_id, username = cur.fetchone()
     except TypeError:
-        conn.close()
         return "{}"
 
     challenge = rand_str(32)
@@ -332,7 +296,7 @@ def request_reset_password():
         WHERE user_id = %s;
     """, (user_id,))
 
-    conn.commit()
+    flask.g.db.commit()
 
     reset_password_url = "%s/auth/reset_password" % domain
     send_email(
@@ -350,20 +314,17 @@ def request_reset_password():
             <p>%s</p>
         """ % (username, challenge, reset_password_url, reset_password_url, project_name))
 
-    conn.close()
-
     return "{}"
 
 
 @bp.route("/password", methods=("PUT",))
 def reset_password():
-    form = flask.request.get_json()
     try:
-        username = str(form["username"])
-        email = str(form["email"]).lower()
-        response = str(form["response"])
-        salt = str(form["salt"])
-        password_hash = str(form["password_hash"])
+        username = str(flask.g.form["username"])
+        email = str(flask.g.form["email"]).lower()
+        response = str(flask.g.form["response"])
+        salt = str(flask.g.form["salt"])
+        password_hash = str(flask.g.form["password_hash"])
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -376,8 +337,7 @@ def reset_password():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT *
@@ -395,8 +355,7 @@ def reset_password():
         WHERE username=%s;
     """, ("verified", salt, password_hash, username))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     send_email(
         noreply,
@@ -428,8 +387,7 @@ def get_username():
     ):
         return "{}", 400
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         SELECT username
@@ -456,26 +414,21 @@ def get_username():
             """ % (project_name, username, project_name)
         )
 
-    conn.close()
-
     return "{}"
 
 
 @bp.route("/user", methods=("PUT",))
 def update_user_info():
-    user = check_user_token()
+    user = get_user_token()
 
     if user is None:
         return "{}", 401
 
-    form = flask.request.get_json()
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     if "username" in form:
-        username = str(form["username"])
+        username = str(flask.g.form["username"])
         if not check_username(username):
-            conn.close()
             return "{}", 400
 
         conn.execute("""
@@ -485,9 +438,8 @@ def update_user_info():
         """, (username, user["user_id"]))
 
     if "email" in form:
-        email = str(form["email"])
+        email = str(flask.g.form["email"])
         if not check_email(email):
-            conn.close()
             return "{}", 400
 
         conn.execute("""
@@ -497,9 +449,8 @@ def update_user_info():
         """, (email, user["user_id"]))
 
     if "avatar" in form:
-        avatar = str(form["avatar"])
+        avatar = str(flask.g.form["avatar"])
         if not check_url(avatar):
-            conn.close()
             return "{}", 400
 
         conn.execute("""
@@ -510,17 +461,15 @@ def update_user_info():
 
     if "password_hash" in form:
         try:
-            salt = str(form["salt"])
+            salt = str(flask.g.form["salt"])
             password_hash = str(form["password_hash"])
         except (KeyError, TypeError):
-            conn.close()
             return "{}", 400
 
         if not(
             check_salt(salt) and
             check_response(password_hash)
         ):
-            conn.close()
             return "{}", 400
 
         conn.execute("""
@@ -529,21 +478,19 @@ def update_user_info():
             WHERE id = %s;
         """, (salt, password_hash, user["user_id"]))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return "{}"
 
 
 @bp.route("/user", methods=("DELETE",))
 def delete_user():
-    user = check_user_token()
+    user = get_user_token()
 
     if user is None:
         return "{}"
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur = flask.g.db.cursor()
 
     cur.execute("""
         DELETE FROM sessions
@@ -555,7 +502,6 @@ def delete_user():
         WHERE user_id = %s;
     """, (user["user_id"],))
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return "{}"

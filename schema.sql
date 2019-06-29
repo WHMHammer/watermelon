@@ -27,15 +27,18 @@ create table watermelon.events(
     id int auto_increment,
     title varchar(32),
     description varchar(128),
-    end_time datetime,
-    weekly0 datetime,
-    weekly1 datetime,
-    weekly2 datetime,
-    weekly3 datetime,
-    weekly4 datetime,
-    weekly_window int(3),
-    monthly0 datetime,
-    monthly_window int(3),
+    -- all times are in the form of unix_timestamp // 60, stored by int(8) data type
+    end_time int(8),   -- end time of the whole event
+    -- weekly schedules
+    weekly0 int(8),
+    weekly1 int(8),
+    weekly2 int(8),
+    weekly3 int(8),
+    weekly4 int(8),
+    weekly_window int(3),   -- in minutes
+    -- monthly schedules
+    monthly0 int(8),
+    monthly_window int(3),  -- in minutes
     primary key(id)
 );
 
@@ -47,10 +50,10 @@ create table watermelon.roles(
     foreign key(user_id) references watermelon.users(id)
 );
 
-create table watermelon.attendence(
+create table watermelon.attendance(
     event_id int not null,
     user_id int not null,
-    time datetime,
+    time int(8),
     foreign key(event_id) references watermelon.events(id),
     foreign key(user_id) references watermelon.users(id)
 );
