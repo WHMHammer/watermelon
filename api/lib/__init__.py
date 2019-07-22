@@ -6,23 +6,6 @@ from random import choice
 from info import *
 
 
-# database
-def close_db():
-    db = flask.g.pop("db")
-    if db is not None:
-        db.close()
-
-
-def connect_db():
-    close_db()
-    flask.g.db = sql.connect(
-        user=db_user,
-        password=db_password,
-        host=db_host,
-        database=db_name
-    )
-
-
 # email
 def send_email(sender, to, subject, body):
     with smtplib.SMTP_SSL(sender.get("smtp_server"), sender.get("port")) as conn:

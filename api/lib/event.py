@@ -80,7 +80,7 @@ def get_attendance(event_id, user_id, start_time, end_time):
     return cur.fetchall()
 
 
-def sign_attendance(event_id, user_id, sign_time):
+def add_attendance(event_id, user_id, sign_time):
     cur = flask.g.db.cursor()
     cur.execute("""
         INSERT INTO attendance

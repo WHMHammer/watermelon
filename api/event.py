@@ -11,9 +11,10 @@ bp = flask.Blueprint("event", __name__, url_prefix="/event")
 @bp.before_request
 def before_event():
     flask.g.now = int(time()) // 60
-    flask.g.user = get_user_token()
-    if flask.g.user is None:
-        return "{}"
+    if flask.request.method != "GET":
+        flask.g.user = get_user_token()
+        if flask.g.user is None:
+            return "{}", 403
 
 
 @bp.route("/events", methods=("POST",))
@@ -39,9 +40,9 @@ def create_event():
         return "{}", 400
 
     rm_weekly_overlaps(weekly_schedules)
-    
+
     cur = flask.g.db.cursor()
-    
+
     cur.execute("""
             INSERT INTO events(title, description, end_time, weekly_window, monthly_window)
             VALUES (?,?,?,?,?);
@@ -59,7 +60,6 @@ def create_event():
                     WHERE id = %s;
                 """ % i, (weekly_schedules[i], event_id))
             else:
-                
                 return "{}", 403
         except IndexError:
             break
@@ -73,7 +73,6 @@ def create_event():
                     WHERE id = %s;
                 """ % i, (monthly_schedules[i], event_id))
             else:
-                
                 return "{}", 403
         except IndexError:
             break
@@ -84,7 +83,7 @@ def create_event():
     """, (event_id, flask.g.user["id"], "owner"))
 
     flask.g.db.commit()
-    
+
     return "{}"
 
 
@@ -136,7 +135,7 @@ def sign_attendance():
 
         while flask.g.now >= schedule and flask.g.now <= end_time:
             if flask.g.now <= schedule + weekly_window:
-                sign_attendance(event_id, flask.g.user["id"], flask.g.now)
+                add_attendance(event_id, flask.g.user["id"], flask.g.now)
                 flask.g.db.commit()
                 return "{}"
 
@@ -164,7 +163,7 @@ def sign_attendance():
 
         while flask.g.now >= schedule and flask.g.now <= end_time:
             if flask.g.now <= schedule + monthly_window:
-                sign_attendance(event_id, flask.g.user["id"], flask.g.now)
+                add_attendance(event_id, flask.g.user["id"], flask.g.now)
                 flask.g.db.commit()
 
                 return "{}"
