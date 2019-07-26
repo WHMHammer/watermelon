@@ -48,7 +48,6 @@ def hash(*args):
 
 # user token
 def generate_user_token(username):
-    
     cur = flask.g.db.cursor()
 
     cur.execute("""
@@ -78,8 +77,7 @@ def generate_user_token(username):
     }
 
 
-def get_user_token():
-    user_token = flask.request.get_json().get("user_token")
+def get_user_token(user_token):
     try:
         user_id = int(user_token["user_id"])
         session = str(user_token["session"])
@@ -89,15 +87,13 @@ def get_user_token():
     if not check_salt(session):
         return None
 
-    
-    cur = flask.g.db.cursor()
+    conn = connect_db()
+    cur = conn.cursor()
 
     cur.execute("""
         DELETE from sessions
         WHERE expire_time < %s;
     """, (int(time()),))
-
-    flask.g.db.commit()
 
     cur.execute("""
         SELECT users.username, users.email, users.role
@@ -111,6 +107,9 @@ def get_user_token():
         username, email, role = cur.fetchone()
     except TypeError:
         return None
+
+    conn.commit()
+    conn.close()
 
     return {
         "id": user_id,

@@ -1,6 +1,7 @@
 # project
 project_name = "Watermelon"
 domain = ""
+secret_key = ""
 
 # database
 db_user = ""

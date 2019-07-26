@@ -157,7 +157,7 @@ def verify():
 @bp.route("/login", methods=("GET",))
 def get_challenge():
     try:
-        username = unquote(str(flask.request.args["username"]))
+        username = unquote(str(flask.g.form["username"]))
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -242,7 +242,7 @@ def login():
 
 @bp.route("/login", methods=("DELETE",))
 def logout():
-    user = get_user_token()
+    user = get_user_token(flask.g.form.get("user_token", None))
 
     if user is None:
         return "{}"
@@ -262,7 +262,7 @@ def logout():
 @bp.route("/password", methods=("GET",))
 def request_password_reset():
     try:
-        email = unquote(str(flask.request.args["email"]))
+        email = unquote(str(flask.g.form["email"]))
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -378,7 +378,7 @@ def reset_password():
 @bp.route("/user", methods=("GET",))
 def get_username():
     try:
-        email = unquote(str(flask.request.args["email"]))
+        email = unquote(str(flask.g.form["email"]))
     except (KeyError, TypeError):
         return "{}", 400
 
@@ -419,7 +419,7 @@ def get_username():
 
 @bp.route("/user", methods=("PUT",))
 def update_user_info():
-    user = get_user_token()
+    user = get_user_token(flask.g.form.get("user_token", None))
 
     if user is None:
         return "{}", 401
@@ -485,7 +485,7 @@ def update_user_info():
 
 @bp.route("/user", methods=("DELETE",))
 def delete_user():
-    user = get_user_token()
+    user = get_user_token(flask.g.form.get("user_token", None))
 
     if user is None:
         return "{}"

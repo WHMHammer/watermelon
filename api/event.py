@@ -12,7 +12,7 @@ bp = flask.Blueprint("event", __name__, url_prefix="/event")
 def before_event():
     flask.g.now = int(time()) // 60
     if flask.request.method != "GET":
-        flask.g.user = get_user_token()
+        flask.g.user = get_user_token(flask.g.form.get("user_token", None))
         if flask.g.user is None:
             return "{}", 403
 
