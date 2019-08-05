@@ -189,3 +189,33 @@ def sign_attendance():
     flask.g.db.commit()
 
     return "{}"
+
+#-------------new---------------------------
+@bp.route("/subscribe", methods=("POST",))
+def subscribe_event():
+    try:
+        event_id=int(flask.g.form["event_id"])
+        user_id=int(flask.g.form["user_id"])
+    except (KeyError,TypeError):
+        return "{}",400
+
+    cur = flask.g.db.cursor()
+
+    #check if user has subscribed before
+    cur.execute("""
+        SELECT *
+        FROM roles
+        WHERE event_id = %s AND user_id = %s;
+        """,(event_id,user_id))
+
+    if cur.fetchone() != None:
+        return dumps({"err_msg":["You have subscribed this event."]}),403
+    else:
+        cur.execute("""
+            INSERT INTO roles
+            VALUES(%s,%s);
+            """,(event_id,user_id))
+
+        flask.g.db.commit()
+        return "{}"
+#-------------------------------------------
