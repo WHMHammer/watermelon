@@ -195,7 +195,6 @@ def sign_attendance():
 def subscribe_event():
     try:
         event_id=int(flask.g.form["event_id"])
-        user_id=int(flask.g.form["user_id"])
     except (KeyError,TypeError):
         return "{}",400
 
@@ -206,15 +205,15 @@ def subscribe_event():
         SELECT *
         FROM roles
         WHERE event_id = %s AND user_id = %s;
-        """,(event_id,user_id))
+        """,(event_id,flask.g.user["id"]))
 
     if cur.fetchone() != None:
         return dumps({"err_msg":["You have subscribed this event."]}),403
     else:
         cur.execute("""
-            INSERT INTO roles
+            INSERT INTO roles(event_id,user_id)
             VALUES(%s,%s);
-            """,(event_id,user_id))
+            """,(event_id,flask.g.user["id"]))
 
         flask.g.db.commit()
         return "{}"
