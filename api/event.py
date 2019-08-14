@@ -190,7 +190,6 @@ def sign_attendance():
 
     return "{}"
 
-#-------------new---------------------------
 @bp.route("/subscribe", methods=("POST",))
 def subscribe_event():
     try:
@@ -215,6 +214,44 @@ def subscribe_event():
             VALUES(%s,%s);
             """,(event_id,flask.g.user["id"]))
 
-        flask.g.db.commit()
         return "{}"
+
+#-------------new---------------------------
+@bp.route("/events_info", methods=("POST",))
+def event_info():
+    try:
+        event_id=int(flask.g.form["event_id"])
+    except (KeyError,TypeError)：
+        return "{}",400
+
+    cur = flask.g.db.cursor()
+
+    cur.execute("""
+        SELECT *
+        FROM roles
+        WHERE event_id = %s AND user_id = %s;
+        """,(event_id,flask.g.user["id"]))
+
+    if cur.fetchone() == None:
+        return dumps({"err_msg":["You have not subscribed this event."]}),403
+    else:
+        cur.execute("""
+            SELECT (title,description)
+            FROM events
+            WHERE event_id = %s;
+            """,(event_id))
+        msg=cur.fetchone()
+
+        cur.execute("""
+            SELECT (user_id, role, username)
+            From roles JOIN users
+            WHERE (event_id = %s AND roles.user_id=users.id);
+            """,(event_id))
+        mmb=cur.fetchall()
+
+    return dumps(
+        {"title": msg[0],
+        "description":msg[1],
+        "members":mmb}
+        )
 #-------------------------------------------
