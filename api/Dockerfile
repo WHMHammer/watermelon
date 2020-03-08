@@ -4,8 +4,7 @@ WORKDIR /app
 
 EXPOSE 80
 
-RUN pip3 install uwsgi blinker simplejson python-dotenv watchdog flask
-RUN pip3 install mysql-connector-python
+RUN pip3 install -r requirements.txt
 
 COPY . /app
 

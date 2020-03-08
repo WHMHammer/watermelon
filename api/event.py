@@ -1,4 +1,3 @@
-from simplejson import dumps
 from time import time
 
 from lib import *
@@ -7,15 +6,13 @@ from lib.auth import get_user_token
 
 bp = flask.Blueprint("event", __name__, url_prefix="/event")
 
-
 @bp.before_request
 def before_event():
-    flask.g.now = int(time()) // 60
+    flask.g.NOW = int(time())
     if flask.request.method != "GET":
         flask.g.user = get_user_token(flask.g.form.get("user_token", None))
         if flask.g.user is None:
             return "{}", 403
-
 
 @bp.route("/events", methods=("POST",))
 def create_event():
@@ -27,15 +24,15 @@ def create_event():
         weekly_window = int(flask.g.form["weekly_window"])
         monthly_schedules = list(flask.g.form["monthly_schedules"])
         monthly_window = int(flask.g.form["monthly_window"])
-    except (KeyError,TypeError):
+    except (KeyError, TypeError):
         return "{}", 400
 
     if not(
-        check_title(title) and
-        check_description(description) and
-        check_end_time(end_time) and
-        check_weekly(weekly_schedules, weekly_window) and
-        check_monthly(monthly_schedules, monthly_window)
+        legal_title(title) and
+        legal_text(description) and
+        legal_end_time(end_time) and
+        legal_weekly_schedules(weekly_schedules, weekly_window) and
+        legal_monthly_schedules(monthly_schedules, monthly_window)
     ):
         return "{}", 400
 
@@ -45,7 +42,7 @@ def create_event():
 
     cur.execute("""
             INSERT INTO events(title, description, end_time, weekly_window, monthly_window)
-            VALUES (?,?,?,?,?);
+            VALUES (%s, %s, %s, %s, %s);
         """, (title, description, end_time, weekly_window, monthly_window))
 
     cur.execute("SELECT LAST_INSERT_ID();")
@@ -53,12 +50,12 @@ def create_event():
 
     for i in range(weekly_schedule_max_number):
         try:
-            if check_schedule(weekly_schedules[i], weekly_window, end_time):
-                cur.execute("""
+            if legal_schedule(weekly_schedules[i], weekly_window, end_time):
+                cur.execute(f"""
                     UPDATE events
-                    SET weekly%d = %s
+                    SET weekly{i} = %s
                     WHERE id = %s;
-                """ % i, (weekly_schedules[i], event_id))
+                """, (weekly_schedules[i], event_id))
             else:
                 return "{}", 403
         except IndexError:
@@ -66,12 +63,12 @@ def create_event():
 
     for i in range(monthly_schedule_max_number):
         try:
-            if check_schedule(monthly_schedules[i], monthly_window, end_time):
-                cur.execute("""
+            if legal_schedule(monthly_schedules[i], monthly_window, end_time):
+                cur.execute(f"""
                     UPDATE events
-                    SET monthly%d = FROM_UNIXTIME(%s)
+                    SET monthly{i} = FROM_UNIXTIME(%s)
                     WHERE id = %s;
-                """ % i, (monthly_schedules[i], event_id))
+                """, (monthly_schedules[i], event_id))
             else:
                 return "{}", 403
         except IndexError:
@@ -79,13 +76,12 @@ def create_event():
 
     cur.execute("""
         INSERT INTO roles
-        VALUES(%s,%s,%s);
+        VALUES(%s, %s, %s);
     """, (event_id, flask.g.user["id"], "owner"))
 
     flask.g.db.commit()
 
     return "{}"
-
 
 @bp.route("/attendance", methods=("POST",))
 def sign_attendance():
@@ -93,7 +89,7 @@ def sign_attendance():
 
     try:
         event_id = int(form["event_id"])
-        response = str(form["response"])
+        #response = str(form["response"])   #
     except (KeyError,TypeError):
         return "{}", 400
 
@@ -107,7 +103,7 @@ def sign_attendance():
         LIMIT 1;
     """, (event_id, flask.g.user["id"], "subscriber"))
     if cur.fetchone() is None:
-        return dumps({"err_msg": ["You have not subscribed this event."]}), 403
+        return dumps({"err_msg": [E_not_subscribed]}), 403
 
     # check whether event has ended
     cur.execute("""
@@ -117,8 +113,11 @@ def sign_attendance():
     """, (event_id,))
     end_time, weekly_window, monthly_window = cur.fetchone()
 
-    if flask.g.now >= end_time:
-        return dumps({"err_msg": ["Event has ended."]}), 403
+    if flask.g.NOW >= end_time:
+        return dumps({"err_msg": [E_event_ended]}), 403
+
+    # check response
+    # not implemented yet
 
     # check time
     for i in range(weekly_schedule_max_number):
@@ -133,9 +132,9 @@ def sign_attendance():
         except IndexError:
             break
 
-        while flask.g.now >= schedule and flask.g.now <= end_time:
-            if flask.g.now <= schedule + weekly_window:
-                add_attendance(event_id, flask.g.user["id"], flask.g.now)
+        while flask.g.NOW >= schedule and flask.g.NOW <= end_time:
+            if flask.g.NOW <= schedule + weekly_window:
+                add_attendance(event_id, flask.g.user["id"], flask.g.NOW)
                 flask.g.db.commit()
                 return "{}"
 
@@ -161,9 +160,9 @@ def sign_attendance():
         except IndexError:
             break
 
-        while flask.g.now >= schedule and flask.g.now <= end_time:
-            if flask.g.now <= schedule + monthly_window:
-                add_attendance(event_id, flask.g.user["id"], flask.g.now)
+        while flask.g.NOW >= schedule and flask.g.NOW <= end_time:
+            if flask.g.NOW <= schedule + monthly_window:
+                add_attendance(event_id, flask.g.user["id"], flask.g.NOW)
                 flask.g.db.commit()
 
                 return "{}"
@@ -172,30 +171,26 @@ def sign_attendance():
                 UPDATE events
                 SET monthly{i} = UNIX_TIMESTAMP(
                     DATEADD(
-                        FROM_UNIXTIME((
+                        FROM_UNIXTIME(
                             SELECT monthly{i}
                             FROM events
                             WHERE id = %s
-                        ) * 60),
+                        ),
                         INTERVAL 1 MONTH
                     )
-                ) DIV 60
+                )
                 WHERE id = %s;
             """, (event_id, event_id))
 
-    # check response
-    # not implemented yet
-
     flask.g.db.commit()
 
-    return "{}"
-
+    return dumps({"err_msg": [E_unavailable_time]}), 403
 
 @bp.route("/subscribe", methods=("POST",))
 def subscribe_event():
     try:
         event_id = int(flask.g.form["event_id"])
-    except (KeyError,TypeError):
+    except (KeyError, TypeError):
         return "{}", 400
 
     cur = flask.g.db.cursor()
@@ -208,12 +203,12 @@ def subscribe_event():
         """,(event_id, flask.g.user["id"]))
 
     if cur.fetchone() != None:
-        return dumps({"err_msg":["You have subscribed this event."]}),403
+        return dumps({"err_msg":[E_subscribed]}), 403
 
     cur.execute("""
-        INSERT INTO roles(event_id,user_id)
-        VALUES(%s,%s);
-        """,(event_id, flask.g.user["id"]))
+        INSERT INTO roles(event_id, user_id)
+        VALUES(%s, %s);
+        """, (event_id, flask.g.user["id"]))
 
     flask.g.db.commit()
 

@@ -1,0 +1,7 @@
+uwsgi
+blinker
+simplejson
+python-dotenv
+watchdog
+flask
+mysql-connector-python

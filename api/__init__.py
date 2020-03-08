@@ -1,20 +1,16 @@
 from lib import *
 
 app = flask.Flask(__name__)
-app.config["SECRET_KEY"] = secret_key
-
 
 @app.before_request
 def before_all():
     if flask.request.method == "OPTIONS":
         return "{}"
     elif flask.request.method != "GET":
-        flask.g.form = flask.request.get_json()
+        flask.g.form = dict(flask.request.get_json())
     else:
-        flask.g.form = flask.request.args
-
+        flask.g.form = dict(flask.request.args)
     flask.g.db = connect_db()
-
 
 @app.after_request
 def after_all(rp):
@@ -26,7 +22,6 @@ def after_all(rp):
     rp.headers.set("Access-Control-Allow-Headers", "Content-Type")
     rp.headers.set("Content-Type", "application/json")
     return rp
-
 
 from auth import bp as auth_bp
 app.register_blueprint(auth_bp)

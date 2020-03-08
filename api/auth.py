@@ -1,12 +1,9 @@
-from simplejson import dumps
 from time import time
 from urllib.parse import unquote
 
-from lib import *
 from lib.auth import *
 
 bp = flask.Blueprint("auth", __name__, url_prefix="/auth")
-
 
 @bp.route("/register", methods=("POST",))
 def register():
@@ -18,11 +15,11 @@ def register():
     except (KeyError, TypeError):
         return "{}", 400
 
-    if not(
-        check_username(username) and
-        check_salt(salt) and
-        check_response(password_hash) and
-        check_email(email)
+    if (
+        not legal_username(username) or
+        not legal_salt(salt) or
+        not legal_hash(password_hash) or
+        not legal_email(email)
     ):
         return "{}", 400
 
@@ -40,7 +37,7 @@ def register():
 
     if cur.fetchone() is not None:
         err = True
-        err_msg.append("The email address you entered has already been used.")
+        err_msg.append(E_email_registered)
 
     cur.execute("""
         SELECT *
@@ -51,7 +48,7 @@ def register():
 
     if cur.fetchone() is not None:
         err = True
-        err_msg.append("The username you entered has already been used.")
+        err_msg.append(E_username_registered)
 
     if err:
         return dumps({"err_msg": err_msg}), 403
@@ -69,31 +66,30 @@ def register():
     """, (username, email, salt, password_hash, challenge))
 
     try:
-        verify_url = "%s/auth/verify" % (domain)
+        verify_url = f"{domain}/auth/verify"
         send_email(
             noreply,
             email,
-            "Verify your registration at %s" % project_name,
-            """
-                <p>Hello, dear %s:</p>
+            f"Verify your registration at {project_name}",
+            f"""
+                <p>Hello, dear {username}:</p>
                 <p>Your verification code is:</p>
-                <p><code>%s</code></p>
-                <p>Please click <a href="%s">here</a> or paste the following url to your web browser to verify your registration:</p>
-                <p>%s</p>
+                <p><code>{challenge+salt}</code></p>
+                <p>Please click <a href="{verify_url}">here</a> or paste the following url to your web browser to verify your registration:</p>
+                <p>{verify_url}</p>
                 <br/>
                 <p>Best regards,</p>
-                <p>%s</p>
-            """ % (username, challenge+salt, verify_url, verify_url, project_name)
+                <p>{project_name}</p>
+            """
         )
     except smtplib.SMTPRecipientsRefused:
         return dumps({
-            "err_msg": ["The email address you entered is invalid."]}
+            "err_msg": [E_invalid_email]}
         ), 403
 
     flask.g.db.commit()
 
     return "{}"
-
 
 @bp.route("/register", methods=("PUT",))
 def verify():
@@ -105,9 +101,9 @@ def verify():
         return "{}", 400
 
     if not(
-        check_username(username) and
-        check_response(response) and
-        check_email(email)
+        legal_username(username) and
+        legal_hash(response) and
+        legal_email(email)
     ):
         return "{}", 400
 
@@ -125,7 +121,7 @@ def verify():
     except TypeError:
         return "{}", 403
 
-    if response != hash(challenge, password_hash):
+    if response != hash_r(challenge, password_hash):
         return "{}", 403
 
     cur.execute("""
@@ -137,14 +133,14 @@ def verify():
     send_email(
         noreply,
         email,
-        "Your registration at %s is verified" % project_name,
-        """
-            <p>Dear %s:</p>
-            <p>Your registration at %s is verified. Have fun!</p>
+        f"Your registration at {project_name} is verified",
+        f"""
+            <p>Dear {username}:</p>
+            <p>Your registration at {project_name} is verified. Have fun!</p>
             <br/>
-            <p>Best rgards,</p>
-            <p>%s</p>
-        """ % (username, project_name, project_name)
+            <p>Best regards,</p>
+            <p>{project_name}</p>
+        """
     )
 
     flask.g.db.commit()
@@ -152,7 +148,6 @@ def verify():
     return dumps({
         "user_token": generate_user_token(username)
     })
-
 
 @bp.route("/login", methods=("GET",))
 def get_challenge():
@@ -162,7 +157,7 @@ def get_challenge():
         return "{}", 400
 
     if not(
-        check_username(username)
+        legal_username(username)
     ):
         return "{}", 400
 
@@ -196,7 +191,6 @@ def get_challenge():
         "challenge": challenge
     })
 
-
 @bp.route("/login", methods=("POST",))
 def login():
     try:
@@ -206,8 +200,8 @@ def login():
         return "{}", 400
 
     if not(
-        check_username(username) and
-        check_response(response)
+        legal_username(username) and
+        legal_hash(response)
     ):
         return "{}", 400
 
@@ -224,7 +218,7 @@ def login():
     except TypeError:
         return "{}", 403
 
-    if response != hash(challenge, password_hash):
+    if response != hash_r(challenge, password_hash):
         return "{}", 403
 
     cur.execute("""
@@ -238,7 +232,6 @@ def login():
     return dumps({
         "user_token": generate_user_token(username)
     })
-
 
 @bp.route("/login", methods=("DELETE",))
 def logout():
@@ -258,7 +251,6 @@ def logout():
 
     return "{}"
 
-
 @bp.route("/password", methods=("GET",))
 def request_password_reset():
     try:
@@ -266,7 +258,7 @@ def request_password_reset():
     except (KeyError, TypeError):
         return "{}", 400
 
-    if not check_email(email):
+    if not legal_email(email):
         return "{}", 400
 
     cur = flask.g.db.cursor()
@@ -298,24 +290,24 @@ def request_password_reset():
 
     flask.g.db.commit()
 
-    reset_password_url = "%s/auth/reset_password" % domain
+    reset_password_url = f"{domain}/auth/reset_password"
     send_email(
         noreply,
         email,
-        "Reset your password at %s" % project_name,
-        """
-            <p>Hello, dear %s:</p>
+        f"Reset your password at {project_name}",
+        f"""
+            <p>Hello, dear {username}:</p>
             <p>Your verification code is:</p>
-            <p><code>%s</code></p>
-            <p>Please click <a href="%s">here</a> or paste the following url to your web browser to reset your password:</p>
-            <p>%s</p>
+            <p><code>{challenge}</code></p>
+            <p>Please click <a href="{reset_password_url}">here</a> or paste the following url to your web browser to reset your password:</p>
+            <p>{reset_password_url}</p>
             <br/>
             <p>Best regards,</p>
-            <p>%s</p>
-        """ % (username, challenge, reset_password_url, reset_password_url, project_name))
+            <p>{project_name}</p>
+        """
+    )
 
     return "{}"
-
 
 @bp.route("/password", methods=("PUT",))
 def reset_password():
@@ -329,11 +321,11 @@ def reset_password():
         return "{}", 400
 
     if not(
-        check_username(username) and
-        check_email(email) and
+        legal_username(username) and
+        legal_email(email) and
         len(response) == 32 and
-        check_salt(salt) and
-        check_response(password_hash)
+        legal_salt(salt) and
+        legal_hash(password_hash)
     ):
         return "{}", 400
 
@@ -361,19 +353,18 @@ def reset_password():
         noreply,
         email,
         "You have successfully changed your password!",
-        """
-            <p>Hello, dear %s:</p>
+        f"""
+            <p>Hello, dear {username}:</p>
             <p>You have successfully changed your password!</p>
             <br/>
             <p>Best regards,</p>
-            <p>%s</p>
-        """ % (username, project_name)
+            <p>{project_name}</p>
+        """
     )
 
     return dumps({
         "user_token": generate_user_token(username)
     })
-
 
 @bp.route("/user", methods=("GET",))
 def get_username():
@@ -383,7 +374,7 @@ def get_username():
         return "{}", 400
 
     if not(
-        check_email(email)
+        legal_email(email)
     ):
         return "{}", 400
 
@@ -404,18 +395,17 @@ def get_username():
         send_email(
             noreply,
             email,
-            "Your username at %s" % project_name,
-            """
-                <p>Your username at %s is:</p>
-                <p>%s</p>
+            f"Your username at {project_name}",
+            f"""
+                <p>Your username at {project_name} is:</p>
+                <p>{username}</p>
                 <br/>
                 <p>Best regards,</p>
-                <p>%s</p>
-            """ % (project_name, username, project_name)
+                <p>{project_name}</p>
+            """
         )
 
     return "{}"
-
 
 @bp.route("/user", methods=("PUT",))
 def update_user_info():
@@ -426,53 +416,53 @@ def update_user_info():
 
     cur = flask.g.db.cursor()
 
-    if "username" in form:
+    if "username" in flask.g.form:
         username = str(flask.g.form["username"])
-        if not check_username(username):
+        if not legal_username(username):
             return "{}", 400
 
-        conn.execute("""
+        cur.execute("""
             UPDATE users
             SET username = %s
             WHERE id = %s;
         """, (username, user["user_id"]))
 
-    if "email" in form:
+    if "email" in flask.g.form:
         email = str(flask.g.form["email"])
-        if not check_email(email):
+        if not legal_email(email):
             return "{}", 400
 
-        conn.execute("""
+        cur.execute("""
             UPDATE users
             SET email = %s
             WHERE id = %s;
         """, (email, user["user_id"]))
 
-    if "avatar" in form:
+    if "avatar" in flask.g.form:
         avatar = str(flask.g.form["avatar"])
-        if not check_url(avatar):
+        if not legal_url(avatar):
             return "{}", 400
 
-        conn.execute("""
+        cur.execute("""
             UPDATE users
             SET avatar = %s
             WHERE id = %s;
         """, (avatar, user["user_id"]))
 
-    if "password_hash" in form:
+    if "password_hash" in flask.g.form:
         try:
             salt = str(flask.g.form["salt"])
-            password_hash = str(form["password_hash"])
+            password_hash = str(flask.g.form["password_hash"])
         except (KeyError, TypeError):
             return "{}", 400
 
         if not(
-            check_salt(salt) and
-            check_response(password_hash)
+            legal_salt(salt) and
+            legal_hash(password_hash)
         ):
             return "{}", 400
 
-        conn.execute("""
+        cur.execute("""
             UPDATE users
             SET salt = %s, password_hash = %s
             WHERE id = %s;
@@ -481,7 +471,6 @@ def update_user_info():
     flask.g.db.commit()
 
     return "{}"
-
 
 @bp.route("/user", methods=("DELETE",))
 def delete_user():

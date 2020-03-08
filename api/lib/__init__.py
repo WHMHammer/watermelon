@@ -1,10 +1,11 @@
 import flask
 import mysql.connector as sql
 import smtplib
+
 from random import choice
+from simplejson import dumps
 
 from info import *
-
 
 def connect_db():
     return sql.connect(
@@ -13,7 +14,6 @@ def connect_db():
         host=db_host,
         database=db_name
     )
-
 
 # email
 def send_email(sender, to, subject, body):
@@ -30,8 +30,6 @@ def send_email(sender, to, subject, body):
             ), "utf8")
         )
 
-
 # random
 def rand_str(length):
-    alnum = "01234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-    return "".join([choice(alnum) for i in range(length)])
+    return "".join([choice("01234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") for i in range(length)])

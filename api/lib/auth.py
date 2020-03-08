@@ -4,37 +4,27 @@ from time import time
 from info.auth import *
 from lib import *
 
-
 # check request entries (for database)
-def check_username(username):
-    return (
-        bool(username) and
-        len(username) <= username_max_length
-    )
+def legal_username(username):
+    return len(username) <= username_max_length
 
-
-def check_salt(salt):
+def legal_salt(salt):
     return len(salt) == salt_length
 
+def legal_hash(hashed):
+    return len(hashed) == hash_length
 
-def check_response(response):
-    return len(response) == password_hash_length
-
-
-def check_email(email):
+def legal_email(email):
     return len(email) <= email_max_length
 
-
-def check_url(url):
+def legal_url(url):
     return len(url) <= url_max_length
-
 
 # hash
 def generate_salt():
     return rand_str(salt_length)
 
-
-def hash(*args):
+def hash_r(*args):
     if len(args) == 1:
         h = sha3_512(args[0])
         return h.hexdigest()
@@ -45,9 +35,8 @@ def hash(*args):
         s = h.hexdigest()
     return s
 
-
 # user token
-def generate_user_token(username):
+def generate_user_token(username): # username is assumed to be right. Check before calling this function!
     cur = flask.g.db.cursor()
 
     cur.execute("""
@@ -62,11 +51,10 @@ def generate_user_token(username):
     session = generate_salt()
     cur.execute("""
         INSERT into sessions
-        VALUES(%s,%s,%s);
+        VALUES(%s, %s, %s);
     """, (user_id, session, int(time())+session_expire_time))
 
     flask.g.db.commit()
-    
 
     return {
         "user_id": user_id,
@@ -76,19 +64,17 @@ def generate_user_token(username):
         "avatar": avatar
     }
 
-
-def get_user_token(user_token):
+def get_user_token(user_token): # user_token is a dict with exactly the same format as that of the return value of generate_user_token()
     try:
         user_id = int(user_token["user_id"])
         session = str(user_token["session"])
     except (KeyError, TypeError):
         return None
 
-    if not check_salt(session):
+    if not legal_salt(session):
         return None
 
-    conn = connect_db()
-    cur = conn.cursor()
+    cur  = flask.g.db.cursor()
 
     cur.execute("""
         DELETE from sessions
@@ -108,8 +94,7 @@ def get_user_token(user_token):
     except TypeError:
         return None
 
-    conn.commit()
-    conn.close()
+    flask.g.db.commit()
 
     return {
         "id": user_id,
