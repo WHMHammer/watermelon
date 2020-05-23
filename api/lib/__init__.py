@@ -32,4 +32,4 @@ def send_email(sender, to, subject, body):
 
 # random
 def rand_str(length):
-    return "".join([choice("01234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") for i in range(length)])
+    return "".join(choice("01234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM") for i in range(length))
